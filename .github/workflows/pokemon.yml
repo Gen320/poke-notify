@@ -1,0 +1,20 @@
+name: Daily Pokemon Notification
+
+on:
+  schedule:
+    - cron: '0 23 * * *' # 日本時間の午前8時 (UTC 23:00)
+  workflow_dispatch: # 手動でも動かせるようにする
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - run: pip install requests
+      - name: Run Bot
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python pokemon_bot.py
